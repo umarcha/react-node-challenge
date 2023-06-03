@@ -1,5 +1,5 @@
 
-# Simple Notes App
+# React Node Challenge
 
 ## Description
 
