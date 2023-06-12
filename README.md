@@ -37,8 +37,15 @@ To run frontend,
 cd your-project
     npm install
 
+npm run start
+
+TO run backend
 cd backend
-npm install
+npx nodemon server
+
+Note: make sure nodemon is installed
+
+
 
 **Set Up the Environment Variables**
 Create a .env file in the backend directory.
@@ -51,7 +58,7 @@ Define the following environment variables in the .env file:
     DB=DB_Name
     DIALECT=postgres
     DB_PORT=PostgreSQL_Port_Number
-    JWTTOKEN=unique_JWT_token
+    
 
 **Start the Development Servers**
 **Frontend**
@@ -59,13 +66,13 @@ bash
 Copy code
 
     cd frontend
-    npm start
+    npm run start
 
     Backend
     bash
     Copy code
     cd backend
-    npm start
+    npx nodemon server / node server
 
 The React frontend will be accessible at http://localhost:3000, and the Node backend will be running on http://localhost:4000.
 
