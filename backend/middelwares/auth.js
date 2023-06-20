@@ -1,28 +1,43 @@
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const STRINGS = require("../utils/texts");
+const util = require("util");
 
-exports.auth = (req, res, next) => {
- // const token = req.header('authToken');
- var token = req.body.token || req.query.token || req.header("Authorization");
- if (token.startsWith("Bearer ")) {
-  token = token.substring(7, token.length);
- }
+var db = require("../models");
+var User = db.user;
+const JWT = require("jsonwebtoken");
 
- if (!token) {
-  return res.json({
-   status: 0,
-   message: "access denied no token provided ",
-  });
- }
- try {
-  const payload = jwt.verify(token, "JWTKey");
-  req.user = payload;
-  next();
- } catch (e) {
-  console.log(e);
-  res.json({
-   status: 400,
-   message: e.error || "assecc denied not token found",
-  });
- }
-};
+
+
+function auth() {
+  return async (req, res, next) => {
+    const header = req.get("Authorization");
+    if (!header || !header.startsWith("Bearer")) {
+      return res.status(401).json({ message: STRINGS.ERRORS.tokenInvalid });
+    }
+
+    try {
+      const token = header.split(" ")[1];
+      const jwtVerifyAsync = util.promisify(JWT.verify);
+      let decoded = await jwtVerifyAsync(token, process.env.JWT_SECRET);
+console.log(decoded,"decoded")
+      // let role = role;
+      let _id = String(decoded.id);
+
+      let user = await User.findOne({
+        where: {
+          id: _id,
+        },
+      });
+      if (!user)
+        return res.status(401).json({ message: STRINGS.ERRORS.userNotFound });
+
+      req.user = user;
+      req.userId = user.id;
+      next();
+    } catch (err) {
+      console.log("err--->", err);
+      return res.status(401).json({ message: STRINGS.ERRORS.tokenExpired });
+    }
+  };
+}
+
+module.exports = auth;

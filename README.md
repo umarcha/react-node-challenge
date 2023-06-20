@@ -41,9 +41,9 @@ npm run start
 
 TO run backend
 cd backend
-npx nodemon server
+ node server
 
-Note: make sure nodemon is installed
+Note: make sure node is installed
 
 
 
@@ -72,7 +72,7 @@ Copy code
     bash
     Copy code
     cd backend
-    npx nodemon server / node server
+    node server
 
 The React frontend will be accessible at http://localhost:3000, and the Node backend will be running on http://localhost:4000.
 

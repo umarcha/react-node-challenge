@@ -1,49 +1,31 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/authPages/loginPage";
-import RegisterPage from "./pages/authPages/signUp";
-import ProfilePage from "./pages/profilePage";
-import React,{ useState } from "react";
-import Dashboard from "./pages/dashboard";
-
+import React from "react";
+import { AllRoutes } from "./routes";
+import PrivateRoute from "./routes/PrivateRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
-   const [loginToken, setLoginToken] = useState("");
-  
-
-  const handlePage=()=>{
-     // Check if a login token exists in local storage
-      const storedToken = localStorage.getItem("loginToken");
-     if (storedToken) {
-       setLoginToken(storedToken);
-     }
-   }
-
-
-if(loginToken === 'true'){
- return (
-   <BrowserRouter>
-     <Routes>
-       <Route>
-         <Route path="/" element={<Dashboard  onLogout={handlePage}/>}/>
-         <Route path="/profile" element={<ProfilePage />} />
-       </Route>
-     </Routes>
-   </BrowserRouter>
- );
-}
-else{
   return (
+    <ErrorBoundary>
     <BrowserRouter>
       <Routes>
-        <Route>
-          <Route path="/" element={<LoginPage  onLogin={handlePage}/>} />
-          <Route path="/signup" element={<RegisterPage />} />
-        </Route>
+        {AllRoutes?.map((item, index) => (
+          <Route
+            key={index}
+            path={item.path}
+            element={
+              item.isPrivate ? (
+                <PrivateRoute>{item?.page}</PrivateRoute>
+              ) : (
+                item.page
+              )
+            }
+          />
+        ))}
       </Routes>
     </BrowserRouter>
+    </ErrorBoundary>
   );
-}
 }
 
 export default App;

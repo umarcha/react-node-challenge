@@ -1,6 +1,6 @@
 const db = require("../models");
 
-const DBSync = async () => {
+  const DBSync = async () => {
  try {
   await db.sequelize.authenticate();
   await db.sequelize.sync({force: true});

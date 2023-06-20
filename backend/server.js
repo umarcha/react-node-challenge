@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRouter = require('./routes/authRoute');
 const noteRouter = require('./routes/notesRoute');
+require("dotenv").config();
 
+require("./scripts/sync.db")
 
 const app = express();
 
